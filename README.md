@@ -2,73 +2,329 @@
 
 
 
-Monitor Solana network fee secara real-time dan kirim notifikasi otomatis ke Telegram — powered by OpenClaw.
+\*\*Monitor Solana network fee secara real-time dan kirim notifikasi otomatis ke Telegram\*\*
 
 
 
-\## Fitur
+\[!\[Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)](https://python.org)
 
-\- Real-time monitoring setiap 5 menit
+\[!\[Solana](https://img.shields.io/badge/Solana-Mainnet-9945FF?style=for-the-badge\&logo=solana\&logoColor=white)](https://solana.com)
 
-\- Alert fee murah (bawah 4000 lamports)
+\[!\[Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?style=for-the-badge\&logo=telegram\&logoColor=white)](https://telegram.org)
 
-\- Alert fee tinggi (atas 10000 lamports)
+\[!\[OpenClaw](https://img.shields.io/badge/OpenClaw-2026-FF4500?style=for-the-badge)](https://openclaw.ai)
 
-\- Auto-restart kalau bot crash
-
-\- 100% gratis, tanpa API key berbayar
+\[!\[License](https://img.shields.io/badge/MIT-22C55E?style=for-the-badge)](LICENSE)
 
 
 
-\## Cara Install
+<img src="https://img.shields.io/badge/status-active-success?style=flat-square" />
+
+<img src="https://img.shields.io/badge/free-no%20API%20key%20needed-blue?style=flat-square" />
 
 
 
-1\. Install dependencies
+</div>
+
+
+
+---
+
+
+
+\## 📱 Preview
+
+```
+
+🚨 GAS FEE MURAH SEKARANG!
+
+
+
+🟢 Fee Sekarang : 3,800 lamports
+
+💰 Dalam SOL   : 0.000003800 SOL
+
+⚡ Base Fee    : 5,000 lamports
+
+🎯 Priority Fee: 0 lamports
+
+
+
+✅ Waktu yang tepat untuk transaksi SOL!
+
+
+
+🕐 Update: 08:32:14 WIB
+
+🤖 Powered by OpenClaw
+
+```
+
+
+
+---
+
+
+
+\## ✨ Fitur Utama
+
+
+
+| Fitur | Keterangan |
+
+|-------|-----------|
+
+| 🟢 Alert Fee Murah | Notif otomatis saat fee ≤ 4,000 lamports |
+
+| 🔴 Alert Fee Tinggi | Notif otomatis saat fee ≥ 10,000 lamports |
+
+| 🔄 Multi-RPC Fallback | Auto ganti endpoint kalau RPC down |
+
+| 🛡️ Auto Watchdog | Bot restart otomatis kalau crash |
+
+| ⚡ OpenClaw Agent | Bisa diajak ngobrol via Telegram |
+
+| 🆓 100% Gratis | Tidak butuh API key berbayar |
+
+
+
+---
+
+
+
+\## 🛠️ Tech Stack
+
+```
+
+┌─────────────────────────────────────────┐
+
+│  Python 3.11+     → Core bot logic      │
+
+│  aiohttp          → Async HTTP requests │
+
+│  python-telegram-bot → Notif Telegram   │
+
+│  OpenClaw         → Agent \& Scheduler   │
+
+│  Solana Public RPC → Data fee gratis    │
+
+└─────────────────────────────────────────┘
+
+```
+
+
+
+---
+
+
+
+\## 🚀 Quick Start
+
+
+
+\### 1. Clone repo
+
+```bash
+
+git clone https://github.com/zzenero/sol-gas-alert
+
+cd sol-gas-alert
+
+```
+
+
+
+\### 2. Install dependencies
+
+```bash
 
 pip install -r requirements.txt
 
-
-
-2\. Setup Telegram Bot
-
-\- Chat @BotFather di Telegram → /newbot → copy token
-
-\- Chat @userinfobot → copy Chat ID
+```
 
 
 
-3\. Buat file .env
+\### 3. Setup Telegram Bot
 
-\- Copy .env.example jadi .env
+```
 
-\- Isi TELEGRAM\_TOKEN dan TELEGRAM\_CHAT\_ID
+1\. Chat @BotFather → /newbot → copy token
+
+2\. Chat @userinfobot → copy Chat ID kamu
+
+```
 
 
 
-4\. Jalankan bot
+\### 4. Setup environment
+
+```bash
+
+cp .env.example .env
+
+\# Edit .env, isi token \& chat ID
+
+```
+
+
+
+\### 5. Jalankan!
+
+```bash
+
+\# Tanpa OpenClaw
 
 python src/bot.py
 
 
 
-\## OpenClaw Integration
+\# Dengan OpenClaw (recommended)
 
-openclaw cron import openclaw-cron.yaml
+openclaw gateway
 
-openclaw gateway start
+```
 
 
 
-\## Tech Stack
+---
 
-\- Python 3.11+
 
-\- aiohttp
 
-\- python-telegram-bot
+\## ⚙️ Konfigurasi
 
-\- OpenClaw Cron
 
-\- Solana Public RPC
+
+Edit nilai threshold di `src/bot.py`:
+
+```python
+
+ALERT\_LOW\_LAMPORTS  = 4000   # 🟢 Alert fee murah
+
+ALERT\_HIGH\_LAMPORTS = 10000  # 🔴 Alert fee mahal
+
+CHECK\_INTERVAL      = 300    # ⏱️ Cek tiap 5 menit
+
+```
+
+
+
+---
+
+
+
+\## 📁 Struktur Project
+
+```
+
+sol-gas-alert/
+
+├── 📂 src/
+
+│   ├── 🐍 bot.py          # Main bot logic
+
+│   └── 🐍 watchdog.py     # Auto-restart script
+
+├── 📂 logs/               # Log files
+
+├── ⚙️  openclaw-cron.yaml  # OpenClaw scheduler
+
+├── 📦 requirements.txt    # Dependencies
+
+├── 🔒 .env.example        # Config template
+
+└── 📖 README.md
+
+```
+
+
+
+---
+
+
+
+\## 🔄 Cara Kerja
+
+```
+
+OpenClaw Cron
+
+&nbsp;    │
+
+&nbsp;    │  polling tiap 5 menit
+
+&nbsp;    ▼
+
+Solana Public RPC ──► bot.py ──► analisis fee
+
+&nbsp;                                     │
+
+&nbsp;                         ┌───────────┴───────────┐
+
+&nbsp;                         │                       │
+
+&nbsp;                    fee murah?              fee mahal?
+
+&nbsp;                         │                       │
+
+&nbsp;                         ▼                       ▼
+
+&nbsp;                  🟢 Alert ke               🔴 Alert ke
+
+&nbsp;                   Telegram                  Telegram
+
+```
+
+
+
+---
+
+
+
+\## 🤖 OpenClaw Integration
+
+```bash
+
+openclaw configure
+
+openclaw gateway
+
+
+
+\# Chat di Telegram!
+
+\# "Berapa gas fee SOL sekarang?"
+
+```
+
+
+
+---
+
+
+
+\## 📄 License
+
+
+
+MIT License — bebas dipakai dan dimodifikasi.
+
+
+
+---
+
+
+
+<div align="center">
+
+
+
+Made with ❤️ by \[zzenero](https://github.com/zzenero)
+
+
+
+⭐ \*\*Star repo ini kalau bermanfaat!\*\* ⭐
+
+
+
+</div>
 
